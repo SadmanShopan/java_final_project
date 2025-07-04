@@ -7,8 +7,18 @@ spring:
   datasource:
     password: 12345
     url: jdbc:postgresql://localhost:5432/online_shop
+    driver-class-name: org.h2.Driver
     username: postgres
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+      hibernate:
+        ddl-auto: update  # creates/updates tables automatically based on entities
+
+        h2:
+          console:
+            enabled: true
+            path: /h2-console
+
     hibernate:
       ddl-auto: create-drop
     properties:
@@ -16,3 +26,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
+
+
+
+
+
