@@ -14,13 +14,13 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
-        boolean success = userService.login(username, password);
-        return success ? "Login successful!" : "Invalid username or password.";
+        boolean success = userService.authenticate(username, password);
+        return success ? "✅ Login successful!" : "❌ Invalid credentials!";
     }
 
     @PostMapping("/register")
     public String register(@RequestBody User user) {
         userService.register(user);
-        return "User registered successfully!";
+        return "✅ User registered successfully!";
     }
 }
