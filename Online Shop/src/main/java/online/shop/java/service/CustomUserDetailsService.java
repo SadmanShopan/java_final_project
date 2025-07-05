@@ -1,10 +1,12 @@
-package online.shop.java.security;
+package online.shop.java.service;
 
 import online.shop.java.model.User;
 import online.shop.java.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Collections;
 
