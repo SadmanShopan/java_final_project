@@ -1,46 +1,30 @@
 package online.shop.java.service;
 
-import online.shop.java.model.User;
-import online.shop.java.repository.UserRepository;
+import com.retail.supershop.app.entity.User;
+import com.retail.supershop.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
-import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository repo;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder encoder;
 
-    /**
-     * Authenticate a user by comparing raw password with encoded password
-     */
-    public boolean authenticate(String username, String rawPassword) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        return userOpt
-                .map(user -> passwordEncoder.matches(rawPassword, user.getPassword()))
-                .orElse(false);
+    public void register(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        repo.save(user);
     }
 
-    /**
-     * Register a new user (with encoded password)
-     */
-    public User register(User user) {
-        // Encode password before saving to DB
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    /**
-     * Optional: Get user by username
-     */
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User authenticate(String username, String rawPassword) {
+        User user = repo.findByUsername(username);
+        if (user != null && encoder.matches(rawPassword, user.getPassword())) {
+            return user;
+        }
+        return null;
     }
 }
